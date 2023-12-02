@@ -1,0 +1,5 @@
+result.json
+.env
+.DS_Store
+*.sql
+*.json
