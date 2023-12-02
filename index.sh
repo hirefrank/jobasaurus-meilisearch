@@ -41,6 +41,11 @@ function api_request() {
     action=$1
 
     case $action in
+        "create_key")
+            method="POST"
+            endpoint="/keys"
+            payload='{"name": "Search Key for Jobasaurus Frontend", "uid": "'$MEILI_FRONTEND_KEY_UUID'", "description": "Add documents: Products API key", "actions": ["search"], "indexes": ["'$index'"], "expiresAt": null }'
+            ;;
         "create")
             method="POST"
             endpoint="/indexes"
@@ -93,6 +98,10 @@ else
     fi
     index="${MEILI_INDEX}New"
 fi
+
+# create search frontend key 
+echo "Create search frontend key..."
+api_request "create_key"
 
 # create new index 
 echo "Create new index for re-indexing..."
