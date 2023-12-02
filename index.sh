@@ -97,7 +97,7 @@ api_request "settings"
 echo "Add documents to new index..."
 api_request "add"
 
-if [ "$index" == "$MEILI_INDEX" ]; then
+if [ "$index" != "$MEILI_INDEX" ]; then
     # swap indexes and remove unused index
     echo "Promote new index to production and remove old index..."
     api_request swap
