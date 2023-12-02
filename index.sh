@@ -4,21 +4,21 @@
 if [ -z "${MEILI_HTTP_ADDR}" ]; then
     source .env
     meil_host=$SEARCH_DOMAIN
-    echo "\n\nRunning locally"
+    echo "Running locally"
 else
-    echo "\n\nRunning on Koyeb"
+    echo "Running on Koyeb"
     meil_host="http://${MEILI_HTTP_ADDR}"
 
     # Wait until Meilisearch started and listens on port 7700.
     while [ -z "`netstat -tln | grep 7700`" ]; do
-        echo '\n\nWaiting for Meilisearch to start ...'
+        echo 'Waiting for Meilisearch to start ...'
         sleep 1
     done
-    echo '\n\nMeilisearch started.'
+    echo 'Meilisearch started.'
 fi
 
 if [ -z "${PSQL_CONNECTION_STRING}" ]; then
-    echo "\n\nEnvironment variable PSQL_CONNECTION_STRING is undefined."
+    echo "Environment variable PSQL_CONNECTION_STRING is undefined."
     exit 1
 fi
 
@@ -81,12 +81,12 @@ function api_request() {
 
 # the below line should check to see if any files exist in the directory ./data.ms/indexes
 if [ -z "$(ls -A ./data.ms/indexes)" ]; then
-  echo "\n\Index in ./data.ms/indexes does not exist. Creating index..."
+  echo "Index in ./data.ms/indexes does not exist. Creating index..."
     # check to see if the directory exists, if not -- create new index
     index=$MEILI_INDEX
 
 else
-  echo "\n\Index in ./data.ms/indexes exist. Proceeding to re-index."
+  echo "Index in ./data.ms/indexes exist. Proceeding to re-index."
     if [ "$token" != "$WEBHOOK_AUTH" ]; then
         echo "Token is not valid."
         exit 1
@@ -95,20 +95,20 @@ else
 fi
 
 # create new index 
-echo "\n\nCreate new index for re-indexing...\n"
+echo "Create new index for re-indexing..."
 api_request "create"
 
 # update settings of new index
-echo "\n\nUpdate settings for new index...\n"
+echo "Update settings for new index..."
 api_request "settings"
 
 # add results to new index
-echo "\n\nAdd documents to new index...\n"
+echo "Add documents to new index..."
 api_request "add"
 
 if [ "$index" != "$MEILI_INDEX" ]; then
     # swap indexes and remove unused index
-    echo "\n\nPromote new index to production and remove old index...\n"
+    echo "Promote new index to production and remove old index..."
     api_request swap
     api_request delete
 fi
