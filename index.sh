@@ -79,16 +79,14 @@ function api_request() {
     --data-binary "${payload}"
 }
 
-## check to see if "./data.ms" directory exists
-# if it doesn't get latest snapshot
-
-if [ ! -d "./data.ms" ]; then
-  echo "\n\nDirectory ./data.ms does not exist. Creating index..."
+# the below line should check to see if any files exist in the directory ./data.ms/indexes
+if [ -z "$(ls -A ./data.ms/indexes)" ]; then
+  echo "\n\Index in ./data.ms/indexes does not exist. Creating index..."
     # check to see if the directory exists, if not -- create new index
     index=$MEILI_INDEX
 
 else
-  echo "\n\nDirectory ./data.ms exists. Proceeding to re-index."
+  echo "\n\Index in ./data.ms/indexes exist. Proceeding to re-index."
     if [ "$token" != "$WEBHOOK_AUTH" ]; then
         echo "Token is not valid."
         exit 1
