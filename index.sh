@@ -90,6 +90,10 @@ if [ -z "$(ls -A ./data.ms/indexes)" ]; then
     # check to see if the directory exists, if not -- create new index
     index=$MEILI_INDEX
 
+    # create search frontend key 
+    echo "Create search frontend key..."
+    api_request "create_key"
+
 else
   echo "Index in ./data.ms/indexes exist. Proceeding to re-index."
     if [ "$token" != "$WEBHOOK_AUTH" ]; then
@@ -98,10 +102,6 @@ else
     fi
     index="${MEILI_INDEX}New"
 fi
-
-# create search frontend key 
-echo "Create search frontend key..."
-api_request "create_key"
 
 # create new index 
 echo "Create new index for re-indexing..."
